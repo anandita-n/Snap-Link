@@ -135,3 +135,43 @@ We use Vitest and React Testing Library for frontend component verification.
     # macOS/Linux/Bash
     VITE_TOGGLE_TEST_FAILURE=true npm run test
     ```
+
+---
+
+## Jenkins CI/CD Pipeline & AI Triage (Portfolio Showcase)
+
+This project features a fully automated, intelligent CI/CD pipeline built on Jenkins. When tests or linting fail on either the frontend or backend, the pipeline dynamically extracts the failure logs, calls the Google Gemini API to analyze the logs, and generates a structured triage report.
+
+### Jenkins Job Setup
+*   **Job Type**: Pipeline (Declarative)
+*   **SCM Source**: Configured to track this repository's `main` branch.
+*   **Script Path**: `Jenkinsfile` in the project root.
+*   **Credentials**:
+    *   A Jenkins "Secret text" credential named `gemini-api-key` contains the Google Gemini API Key.
+    *   The `Jenkinsfile` binds this key to the `GEMINI_API_KEY` environment variable using `withCredentials` strictly within the `AI Analysis` stage to keep the credential secure.
+
+### How to Trigger Passing vs. Failing Builds
+*   **Passing Build**: By default, `TOGGLE_TEST_FAILURE` and `VITE_TOGGLE_TEST_FAILURE` are set to `false` in the `environment` block of the `Jenkinsfile`. Triggering the build will run all tests, pass successfully, and skip the AI analysis stage.
+*   **Failing Backend Build**: Set `TOGGLE_TEST_FAILURE = 'true'` in the `environment` block of the `Jenkinsfile` and push.
+*   **Failing Frontend Build**: Set `VITE_TOGGLE_TEST_FAILURE = 'true'` in the `environment` block of the `Jenkinsfile` and push.
+*   **Failing Both**: Set both env variables to `'true'` in the `Jenkinsfile` environment block and push.
+
+### AI Triage Stage & Script Details
+If either parallel test/lint stage fails, the pipeline transitions to the **AI Analysis** stage:
+1.  Jenkins collects the failure info (e.g. `backend:test` or `frontend:test` / `frontend:lint`) and local log file paths (`backend/backend_test.log`, `frontend/frontend_lint.log`, `frontend/frontend_test.log`).
+2.  Jenkins triggers `scripts/analyze_failure.py` passing the failure paths.
+3.  The script extracts the log, queries Gemini, and writes a validated schema to `triage_report.json` which is archived as a build artifact and printed to the console.
+
+### Cost & Guardrails Considerations (Built-In)
+*   **Token Cap / Truncation**: To control API costs and stay within context limits, the script automatically truncates the logs, sending only the **last 200 lines** (approx. 6,000 characters).
+*   **Cost Visibility**: The script prints log metrics (line counts and character counts) before making calls to keep API usage transparent and measurable.
+*   **Timeout Protection**: The Gemini API request is configured with a **30-second timeout**.
+*   **Graceful Fallback**: If the Gemini API fails, times out, or returns a malformed response, the script catches the error and writes a default fallback report matching the required JSON schema. The pipeline **does not crash** and the build's original failure state is preserved.
+*   **Advisory-Only**: The AI stage never changes the build status; it is strictly advisory.
+
+### Structured Output and JSON Schema Design Decision (For Interviews)
+When explaining this project in interviews, you can highlight the following architectural decisions regarding the JSON schema:
+1.  **Consistency**: Using a strict JSON schema via Pydantic (`TriageReport`) guarantees that the triage report matches a fixed model. This means automated tools, internal dashboards, or email alerts can reliably parse the report fields (`summary`, `likely_root_cause`, `severity`, `suggested_fix`, `affected_files`) without dealing with erratic plain-text formats.
+2.  **LLM Constraint (Structured Outputs)**: By using Gemini's native `response_schema` configuration, the model is constrained at the decoding stage to output valid JSON matching our exact schema. This drastically reduces parsing errors compared to asking the LLM to write JSON in the prompt and attempting to parse the result.
+3.  **Robust Fallbacks**: Combining Pydantic validation with a structural fallback ensures the pipeline remains deterministic even if the LLM's response is missing fields or fails constraints.
+
