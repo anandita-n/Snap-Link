@@ -1,0 +1,331 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+
+/* Header Section */
+.app-header {
+  text-align: center;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic; /* Cursive serif style matching Iced Mint logo */
+  font-size: 3rem;
+  color: var(--color-accent); /* Cadet Blue */
+  margin-bottom: var(--space-xs);
+  letter-spacing: -0.01em;
+}
+
+.app-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+}
+
+/* Card layout */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+}
+
+.card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600; /* Roman serif style matching Cadet Blue header */
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+}
+
+/* Form Styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text-primary);
+  background-color: #ffffff;
+  outline: none;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.form-input:focus {
+  border-color: var(--color-accent);
+}
+
+.form-input::placeholder {
+  color: #a3b899; /* soft greenish placeholder text */
+}
+
+.submit-btn {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.submit-btn:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.submit-btn:disabled {
+  background-color: #a7c5c6; /* faded Cadet Blue */
+  cursor: not-allowed;
+}
+
+/* Alerts and Messages */
+.message {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+}
+
+.message.error {
+  background-color: #fff1f2;
+  border: 1px solid #ffe4e6;
+  color: var(--color-error);
+}
+
+.message.success {
+  background-color: #f0fdf4;
+  border: 1px solid #dcfce7;
+  color: var(--color-success);
+}
+
+.result-box {
+  margin-top: var(--space-lg);
+  padding: var(--space-md);
+  background-color: #f6f9f3; /* soft tint background */
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.result-box-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.result-url {
+  font-family: monospace;
+  font-size: 1rem;
+  word-break: break-all;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.result-url:hover {
+  text-decoration: underline;
+}
+
+.copy-btn {
+  padding: var(--space-xs) var(--space-sm);
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  transition: all 0.15s ease-in-out;
+}
+
+.copy-btn:hover {
+  background-color: #EFF5DF; /* Iced mint hover background */
+  border-color: #5F9EA0; /* Cadet Blue border */
+  color: var(--color-text-primary);
+}
+
+/* Links Table List */
+.table-container {
+  overflow-x: auto;
+  margin-top: var(--space-md);
+}
+
+.links-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.links-table th,
+.links-table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.links-table th {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background-color: #f6f9f3;
+}
+
+.links-table tr:hover td {
+  background-color: #f9fbf7;
+}
+
+.url-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.short-url-link {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.short-url-link:hover {
+  text-decoration: underline;
+}
+
+.clicks-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: #EFF5DF; /* soft Iced Mint badge */
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: var(--space-xl) 0;
+}
+
+/* QR Code Styles */
+.qr-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+.qr-checkbox-container input {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+}
+
+.qr-checkbox-container label {
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.qr-success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--color-border);
+}
+
+.qr-image {
+  border: 1px solid var(--color-border);
+  padding: var(--space-xs);
+  border-radius: var(--border-radius);
+  background-color: #ffffff;
+  width: 150px;
+  height: 150px;
+  display: block;
+}
+
+.qr-thumbnail-container {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.qr-thumbnail-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-mini-icon {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: #ffffff;
+  transition: transform 0.15s ease-in-out;
+}
+
+.qr-mini-icon:hover {
+  transform: scale(1.1);
+}
+
+.qr-popover {
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-xs);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.qr-thumbnail-container:hover .qr-popover {
+  display: flex;
+  transform: translateX(-50%) scale(1);
+}
+
+.qr-large {
+  width: 120px;
+  height: 120px;
+  background-color: #ffffff;
+  display: block;
+  border-radius: 2px;
+}

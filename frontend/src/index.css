@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #2f3e46;
+  background-color: #EFF5DF; /* Iced Mint Background */
+
+  /* Color Palette */
+  --color-bg: #EFF5DF; /* Iced Mint */
+  --color-card: #ffffff;
+  --color-border: #d2dbcb; /* Soft border color blending with mint bg */
+  --color-text-primary: #2f3e46; /* Dark slate teal text */
+  --color-text-secondary: #526f7a; /* Medium Cadet text */
+  --color-accent: #5F9EA0; /* Cadet Blue Accent */
+  --color-accent-hover: #4e8385; /* Slightly darker Cadet Blue */
+  --color-error: #be123c;
+  --color-success: #15803d;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Layout */
+  --border-radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--space-xl) var(--space-md);
+}
+
+#root {
+  width: 100%;
+  max-width: 800px;
+}
+
+h1, h2, h3 {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+  font-size: 1rem;
+}
