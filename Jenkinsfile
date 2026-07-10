@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        TOGGLE_TEST_FAILURE = 'true'
+    }
+
     stages {
         stage('Checkout') {
             steps {
