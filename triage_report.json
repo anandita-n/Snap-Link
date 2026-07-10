@@ -1,0 +1,9 @@
+{
+  "summary": "Backend pytest suite failed on test_toggleable_failure due to TOGGLE_TEST_FAILURE env var set to true.",
+  "likely_root_cause": "The environment variable TOGGLE_TEST_FAILURE was set to true, triggering pytest.fail() in tests/test_logic.py on line 114.",
+  "severity": "medium",
+  "suggested_fix": "Unset the TOGGLE_TEST_FAILURE environment variable or set it to 'false' in the build pipeline.",
+  "affected_files": [
+    "backend/tests/test_logic.py"
+  ]
+}
