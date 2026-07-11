@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Toggle variables can be overridden at the pipeline/system level if needed,
         // but by default we run tests normally.
-        TOGGLE_TEST_FAILURE = 'false'
+        TOGGLE_TEST_FAILURE = 'true'
         VITE_TOGGLE_TEST_FAILURE = 'false'
     }
 
