@@ -9,6 +9,17 @@ pipeline {
     }
 
     stages {
+        stage('Clean') {
+            steps {
+                script {
+                    if (fileExists('triage_report.json')) {
+                        echo "Cleaning up leftover triage_report.json from previous build"
+                        powershell 'Remove-Item -Path triage_report.json -ErrorAction SilentlyContinue'
+                    }
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
