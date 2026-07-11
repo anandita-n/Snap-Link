@@ -1,0 +1,7 @@
+{
+  "summary": "AI triage failed to analyze the build failure",
+  "likely_root_cause": "The AI model failed to produce a valid report. Error details: 400 INVALID_ARGUMENT. API key not valid. Please pass a valid API key. (reason: API_KEY_INVALID, domain: googleapis.com)",
+  "severity": "high",
+  "suggested_fix": "Please inspect the step logs and verify credentials and API access.",
+  "affected_files": []
+}

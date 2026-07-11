@@ -175,3 +175,46 @@ When explaining this project in interviews, you can highlight the following arch
 2.  **LLM Constraint (Structured Outputs)**: By using Gemini's native `response_schema` configuration, the model is constrained at the decoding stage to output valid JSON matching our exact schema. This drastically reduces parsing errors compared to asking the LLM to write JSON in the prompt and attempting to parse the result.
 3.  **Robust Fallbacks**: Combining Pydantic validation with a structural fallback ensures the pipeline remains deterministic even if the LLM's response is missing fields or fails constraints.
 
+---
+
+## AI Triage Output Examples
+
+Real, verified outputs from our test runs are documented in the [examples/](examples) folder:
+
+*   **Backend Failure**: [triage_report_backend_failure.json](examples/triage_report_backend_failure.json) detects the toggle-triggered failure in `backend/tests/test_logic.py`.
+*   **Frontend Failure**: [triage_report_frontend_failure.json](examples/triage_report_frontend_failure.json) detects the component test failure in `frontend/src/tests/App.test.jsx`.
+*   **API Key / Timeout Fallback**: [triage_report_invalid_key_fallback.json](examples/triage_report_invalid_key_fallback.json) demonstrates the schema-compliant fallback report written when credentials fail or requests time out.
+*   **Clean Build**: Intentionally produces **no** `triage_report.json` artifact at all, as the AI Analysis stage is skipped when tests pass cleanly.
+
+For more details, see the [examples README](examples/README.md).
+
+---
+
+## Debugging Journey: Issues Found and Resolved
+
+During the verification and cleanup pass, four critical issues were identified and resolved to ensure the end-to-end system works flawlessly:
+
+### A. Jenkins Local Git Checkout Restriction
+*   **Issue**: Jenkins aborted the checkout of the repository because it references a local path (`C:\Users\adi\Downloads\cicd-ai-triage`), which is disallowed by default in modern Git plugins for security.
+*   **Resolution**: Enabled local Git SCM checkouts temporarily on the running Jenkins controller by executing `System.setProperty('hudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT', 'true')` and assigning the static boolean flag `hudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT = true` in the Jenkins Script Console.
+
+### B. Gemini Model Deprecation & Availability
+*   **Issue**: The default `gemini-2.5-flash` model threw `404 NOT_FOUND` indicating it is no longer available to new users, while `gemini-2.0-flash` returned `429 RESOURCE_EXHAUSTED` due to free-tier rate limits (quota of 0 requests/min).
+*   **Resolution**: Updated the target model in `scripts/analyze_failure.py` to **`gemini-3.5-flash`**, which is active and has full free-tier quota available.
+
+### C. HTTP Client Timeout Bug (30ms vs 30s)
+*   **Issue**: The triage script initialized the client with `http_options={"timeout": 30.0}`. In the SDK version installed, this was interpreted by the under-the-hood HTTP client as a `30ms` (0.03 seconds) timeout, causing all requests to immediately abort with a read timeout error during SSL handshake.
+*   **Resolution**: Removed `http_options` and passed the `api_key` explicitly to `genai.Client(api_key=api_key)` to allow the SDK to use its default timeout while skipping slow Application Default Credentials (ADC) lookups.
+
+### D. Stale Artifact Bug (Triage Report Persistence)
+*   **Issue**: If a previous build failed and generated `triage_report.json`, that file persisted in the workspace. In subsequent clean/passing runs, since the AI Analysis stage was skipped, the leftover file was still present in the workspace, causing the pipeline to falsely archive and print the stale failure report for the successful build.
+*   **Resolution**: Added a `Clean` stage at the very start of the `Jenkinsfile` and a script block immediately after `checkout scm` in the `Checkout` stage to delete any existing `triage_report.json` before tests execute.
+
+---
+
+> [!NOTE]
+> **Local Demo vs. Production Setup**:
+> This local setup uses Jenkins' capability to check out from a local Git path (`C:\Users\adi\Downloads\cicd-ai-triage`) to enable fast offline local development and testing. 
+> In a production environment, the repository URL would point to a hosted remote repository (e.g., GitHub/GitLab), and the pipeline would be triggered dynamically via Webhooks rather than local polling.
+
+
