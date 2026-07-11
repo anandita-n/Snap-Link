@@ -23,6 +23,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    if (fileExists('triage_report.json')) {
+                        echo "Cleaning up triage_report.json checked out from Git SCM"
+                        powershell 'Remove-Item -Path triage_report.json -ErrorAction SilentlyContinue'
+                    }
+                }
             }
         }
 
