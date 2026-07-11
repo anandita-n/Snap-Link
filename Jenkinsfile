@@ -5,7 +5,7 @@ pipeline {
         // Toggle variables can be overridden at the pipeline/system level if needed,
         // but by default we run tests normally.
         TOGGLE_TEST_FAILURE = 'false'
-        VITE_TOGGLE_TEST_FAILURE = 'true'
+        VITE_TOGGLE_TEST_FAILURE = 'false'
     }
 
     stages {
@@ -105,9 +105,7 @@ pipeline {
                         echo "Triggering Gemini AI Analysis with arguments: ${args.join(' ')}"
                         
                         try {
-                            withEnv(["GEMINI_API_KEY=INVALID_KEY_FOR_TEST"]) {
-                                powershell "python scripts/analyze_failure.py ${args.join(' ')}"
-                            }
+                            powershell "python scripts/analyze_failure.py ${args.join(' ')}"
                         } catch (err) {
                             echo "AI Triage analysis encountered an execution error: ${err.message}"
                         }
