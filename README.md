@@ -138,7 +138,7 @@ We use Vitest and React Testing Library for frontend component verification.
 
 ---
 
-## Jenkins CI/CD Pipeline & AI Triage (Portfolio Showcase)
+## Jenkins CI/CD Pipeline & AI Triage 
 
 This project features a fully automated, intelligent CI/CD pipeline built on Jenkins. When tests or linting fail on either the frontend or backend, the pipeline dynamically extracts the failure logs, calls the Google Gemini API to analyze the logs, and generates a structured triage report.
 
