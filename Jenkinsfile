@@ -105,7 +105,9 @@ pipeline {
                         echo "Triggering Gemini AI Analysis with arguments: ${args.join(' ')}"
                         
                         try {
-                            powershell "python scripts/analyze_failure.py ${args.join(' ')}"
+                            withEnv(["GEMINI_API_KEY=INVALID_KEY_FOR_TEST"]) {
+                                powershell "python scripts/analyze_failure.py ${args.join(' ')}"
+                            }
                         } catch (err) {
                             echo "AI Triage analysis encountered an execution error: ${err.message}"
                         }
