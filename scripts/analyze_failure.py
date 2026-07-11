@@ -127,8 +127,8 @@ def main():
         sys.exit(0)
         
     try:
-        # Initialize client with 30s timeout and explicit API key
-        client = genai.Client(api_key=api_key, http_options={"timeout": 30.0})
+        # Initialize client with explicit API key
+        client = genai.Client(api_key=api_key)
         
         # Call Gemini with structured output
         response = client.models.generate_content(
